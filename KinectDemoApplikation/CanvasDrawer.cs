@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 /// This application contains code framgements which were originally developed by Vangos Pterneas and provided as an example. 
 /// This example code has been modified or directly used within this application. 
 /// The example code provided by Vangos Pterneas is licensed under The Code Project Open License (CPOL).
+/// 
+/// 
 ///
 namespace KinectDemoApplikation
 {
