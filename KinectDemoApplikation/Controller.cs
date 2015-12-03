@@ -127,8 +127,14 @@ namespace KinectDemoApplikation
         public void EnableColor()
         {
             colorFrameHandler.Enabled = true;
+            this.infraredFrameHandler.Enabled = false;  
+            DisplayStatus();
+        }
+
+        public void DisableColor()
+        {
+            colorFrameHandler.Enabled = false;
             this.infraredFrameHandler.Enabled = false;
-            this.Ui.color_background.Visibility = System.Windows.Visibility.Visible;
             DisplayStatus();
         }
 

@@ -113,14 +113,34 @@ namespace KinectDemoApplikation
             //this.Debug.Text = msg;
         }
 
+        //Displays paper instead of camera
+        public void ChangeViewToPaper() {
+            controller.DisableColor();
+            controller.Ui.color_background.Visibility = System.Windows.Visibility.Hidden;
+            controller.Ui.Papier.Visibility = System.Windows.Visibility.Visible;
+            
+        }
 
+        //Displays camera instead of paper
+        public void ChangeViewToCamera() {
+            controller.EnableColor();
+            controller.Ui.Papier.Visibility = System.Windows.Visibility.Hidden;
+            controller.Ui.color_background.Visibility = System.Windows.Visibility.Visible;
+        }
 
         #endregion
 
+        //Button switches between paper and camera view
+
         private void SwitchButton_Click(object sender, RoutedEventArgs e)
         {
-            controller.EnableColor();
-            controller.Ui.Papier.Visibility = System.Windows.Visibility.Hidden;
+            if (controller.Ui.Papier.Visibility == Visibility.Visible)
+            {
+                ChangeViewToCamera();
+            }
+            else {
+                ChangeViewToPaper();
+            }
         }
     }
 }
