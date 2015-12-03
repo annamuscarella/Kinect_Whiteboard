@@ -23,20 +23,26 @@
 
         <Canvas Name="Panel" Grid.Row="1">
             
-            <Grid Name="main_grid" Height="{Binding ActualHeight, ElementName=Panel}" Width="{Binding ActualWidth, ElementName=Panel}">
+            <Grid Name="main_grid" ShowGridLines="False" Height="{Binding ActualHeight, ElementName=Panel}" Width="{Binding ActualWidth, ElementName=Panel}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="1.5*"/>
                     <RowDefinition Height="5*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.5*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Button Name="SwitchButton" Click="SwitchButton_Click">Switch</Button>
 
-                <Grid Name="Pencil_holder"  Canvas.Right="1" Grid.Column="2" Grid.Row="1">
+                <Image Name="Spirale" Source="Images\spirale.png"  Grid.Column="1" Grid.Row="1" Width="{Binding ActualWidth, ElementName=canvas}" VerticalAlignment="Bottom" />
+                <Image Name="Ecke_rechts_oben" Source="Images\ecke_rechts.png" Grid.Column="2" Height="{Binding ActualHeight, ElementName=Spirale}" Width="{Binding ActualWidth, ElementName=Seite_rechts}" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                <Image Name="Seite_rechts" Source="Images\seite_rechts.png" Grid.Column="2" Grid.Row="2" Height="{Binding Width, ElementName=canvas}" HorizontalAlignment="Left" />
+                <Grid Name="Pencil_holder"  Canvas.Right="1" Grid.Column="3" Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.5*"/>
                         <RowDefinition Height="1*"/>
@@ -48,7 +54,7 @@
                     <Image Name="Eraser" Grid.Column="0" Grid.Row="3"  Source="Images\eraser.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
                     <Image Name="Marker" Grid.Column="0" Grid.Row="2"  Source="Images\marker.ico" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
                 </Grid>
-                <Grid DockPanel.Dock="Left" Grid.Column="0" Grid.Row="1">
+                <Grid DockPanel.Dock="Left" Grid.Column="0" Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -56,11 +62,11 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                 </Grid>
-                <Border Name="Papier" Grid.Column="1" Grid.Row="1" Background="White" Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"></Border>
+                <Border Name="Papier" Grid.Column="1" Grid.Row="2" Background="White" Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"></Border>
                 <Image Name="color_background" Grid.Column="1" Grid.Row="1" Height="{Binding ActualHeight, ElementName=Panel}" Width="{Binding ActualWidth, ElementName=Panel}" ></Image>
-                <Canvas Grid.Column="1" Grid.Row="1" Name="canvas">
+                <Canvas Grid.Column="1" Grid.Row="2" Name="canvas">
                    
-                    <Image  Grid.Column="1" Grid.Row="1" Canvas.Left="10.0" Canvas.Top="16.0" Name="cursor" Height="{Binding ActualHeight, ElementName=Pencil}" Panel.ZIndex="1" AllowDrop="True"  Source="C:\Users\bendela\Pictures\Zimmer\hand_cursor.png"></Image>
+                    <Image  Grid.Column="1" Grid.Row="2" Canvas.Left="10.0" Canvas.Top="16.0" Name="cursor" Height="{Binding ActualHeight, ElementName=Pencil}" Panel.ZIndex="1" AllowDrop="True"  Source="C:\Users\bendela\Pictures\Zimmer\hand_cursor.png"></Image>
                     <Image Name="Pencil_cursor" Canvas.Left="10.0" Canvas.Top="16.0" Height="{Binding ActualHeight, ElementName=cursor}" Source="Images\pencil.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True" Visibility="Hidden"></Image>
                 </Canvas>
 

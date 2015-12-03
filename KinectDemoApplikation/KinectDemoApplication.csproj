@@ -109,7 +109,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\eraser.png" />
   </ItemGroup>
@@ -117,6 +116,16 @@
     <Resource Include="Images\filesaveas.png" />
     <Resource Include="Images\hand_cursor.png" />
     <Resource Include="Images\pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\spirale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\marker.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ecke_rechts.png" />
+    <Resource Include="Images\seite_rechts.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
