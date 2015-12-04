@@ -8,31 +8,29 @@
              Name="main"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Background>
-        <ImageBrush ImageSource="C:\Users\bendela\Documents\KinectAppSebi\holz.jpg" TileMode="FlipXY"/>
+        <ImageBrush ImageSource="Images\holz.jpg" TileMode="FlipXY"/>
     </UserControl.Background>
     <Grid Name="OuterWindow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
-        <Viewbox Stretch="UniformToFill" Grid.Row="0" Grid.Column="1" >
-            <TextBlock Name="Title"  Text="Kinect Whiteboard" HorizontalAlignment="Center" Width="{Binding ActualWidth, ElementName=OuterWindow}" Background="#FF006324" Foreground="White" FontFamily="HPFutura Heavy" VerticalAlignment="Center"/>
-        </Viewbox>
+        <Image Source="Images/header.png" HorizontalAlignment="Left" VerticalAlignment="Stretch" Stretch="Uniform" Grid.Row="0"/>
 
 
         <Canvas Name="Panel" Grid.Row="1">
             
             <Grid Name="main_grid" ShowGridLines="False" Height="{Binding ActualHeight, ElementName=Panel}" Width="{Binding ActualWidth, ElementName=Panel}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0*"/>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="5*"/>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="0.25*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="7*"/>
                     <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="1*"/>
@@ -57,9 +55,9 @@
                         <ColumnDefinition Width ="2*"/>
                         <ColumnDefinition Width ="0.5*"/>
                     </Grid.ColumnDefinitions>
-                    <Image Name="Pencil" Grid.Column="0" Grid.Row="1" Source="Images\pencil.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
+                    <Image Name="Pencil" Grid.Column="0" Grid.Row="1" Source="Images\bleistift.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
                     <Image Name="Eraser" Grid.Column="0" Grid.Row="3"  Source="Images\eraser.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
-                    <Image Name="Marker" Grid.Column="0" Grid.Row="2"  Source="Images\marker.ico" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
+                    <Image Name="Marker" Grid.Column="0" Grid.Row="2"  Source="Images\marker_closed.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
                 </Grid>
                 <Grid DockPanel.Dock="Left" Grid.Column="0" Grid.Row="2">
                     <Grid.RowDefinitions>
