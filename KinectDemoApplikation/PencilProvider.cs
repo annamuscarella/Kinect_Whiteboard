@@ -37,7 +37,7 @@ namespace KinectDemoApplikation
             grid_marker = new Image();
 
             pencil = new Image();
-            marker = new Image(); 
+            this.marker = new Image(); 
             eraser = new Image();
 
             //get images from grid on the right side of paper

@@ -71,7 +71,7 @@
                 <Image Name="color_background" Grid.Column="1" Grid.Row="1" Height="{Binding ActualHeight, ElementName=Panel}" Width="{Binding ActualWidth, ElementName=Panel}" ></Image>
                 <Canvas Grid.Column="1" Grid.Row="2" Name="canvas">
                    
-                    <Image  Grid.Column="1" Grid.Row="2" Canvas.Left="10.0" Canvas.Top="16.0" Name="cursor" Height="{Binding ActualHeight, ElementName=Pencil}" Panel.ZIndex="1" AllowDrop="True"  Source="C:\Users\bendela\Pictures\Zimmer\hand_cursor.png"></Image>
+                    <Image  Grid.Column="1" Grid.Row="2" Canvas.Left="10.0" Canvas.Top="16.0" Name="cursor" Height="{Binding ActualHeight, ElementName=Pencil}" Panel.ZIndex="1" AllowDrop="True"  Source="Images\hand_cursor.png"></Image>
                     <Image Name="Pencil_cursor" Canvas.Left="10.0" Canvas.Top="16.0" Height="{Binding ActualHeight, ElementName=cursor}" Source="Images\pencil.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True" Visibility="Hidden"></Image>
                 </Canvas>
 

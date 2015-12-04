@@ -37,6 +37,7 @@
     <Reference Include="Microsoft.Kinect, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -140,10 +141,10 @@
     <Resource Include="Images\header.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\bleistift.png" />
+    <Resource Include="Images\marker_closed.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\marker_closed.png" />
+    <Resource Include="Images\bleistift.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
