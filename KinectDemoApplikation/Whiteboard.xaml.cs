@@ -27,6 +27,7 @@ namespace KinectDemoApplikation
         /// </summary>
         public CanvasDrawer CanvasDrawer { get; set; }
 
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -35,6 +36,8 @@ namespace KinectDemoApplikation
             //create associated objects
             CanvasDrawer = new CanvasDrawer(this);
 
+            
+
             InitializeComponent();
 
 
@@ -42,17 +45,6 @@ namespace KinectDemoApplikation
 
         #region Event Handlers
 
-        /// <summary>
-        /// Starts the application when the UI is opened 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            controller.Start();
-            //controller.ChangeSkeletonMode();
-            //controller.ChangeFingerTrackingMode();
-        }
 
         /// <summary>
         /// Stops the application when the UI is closed
@@ -117,14 +109,19 @@ namespace KinectDemoApplikation
         public void ChangeViewToPaper() {
             controller.DisableColor();
             controller.Ui.color_background.Visibility = System.Windows.Visibility.Hidden;
-            controller.Ui.Papier.Visibility = System.Windows.Visibility.Visible;
-            
+            foreach (UIElement e in controller.PaperElements)
+            {
+                e.Visibility = Visibility.Visible;
+            }
+
         }
 
         //Displays camera instead of paper
         public void ChangeViewToCamera() {
             controller.EnableColor();
-            controller.Ui.Papier.Visibility = System.Windows.Visibility.Hidden;
+            foreach (UIElement e in controller.PaperElements) {
+                e.Visibility = Visibility.Hidden;
+            }
             controller.Ui.color_background.Visibility = System.Windows.Visibility.Visible;
         }
 

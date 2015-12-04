@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 ///
 /// Program: Kinect Demo Application
@@ -34,9 +35,9 @@ namespace KinectDemoApplikation
         private KinectHandler colorFrameHandler;
 
         /// <summary>
-        /// Depth Frame Handler
+        /// Paper UIElements List
         /// </summary>
-
+        public List<UIElement> PaperElements;
 
         /// <summary>
         /// Infrared Frame Handler
@@ -99,6 +100,15 @@ namespace KinectDemoApplikation
             this.skeletonHandler.Enabled = false;
             this.fingerTrackingHandler.Enabled = false;
             DisplayStatus();
+
+            //Add all elements for drwaing paper to a list
+            PaperElements = new List<UIElement>();
+            PaperElements.Add(this.Ui.Papier);
+            PaperElements.Add(this.Ui.Spirale);
+            PaperElements.Add(this.Ui.Ecke_rechts_oben);
+            PaperElements.Add(this.Ui.Seite_rechts);
+            PaperElements.Add(this.Ui.Ecke_rechts_unten);
+            PaperElements.Add(this.Ui.Kante_unten);
 
             this.Ui.color_background.Visibility = System.Windows.Visibility.Hidden;
 
