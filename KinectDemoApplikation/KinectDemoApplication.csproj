@@ -56,6 +56,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="FingerTrackingHandler.cs" />
+    <Compile Include="Gesture.cs" />
+    <Compile Include="GesturePart.cs" />
+    <Compile Include="IGesturePart.cs" />
     <Compile Include="PencilProvider.cs" />
     <Compile Include="SkeletonHandler.cs" />
     <Compile Include="Whiteboard.xaml.cs">

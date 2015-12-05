@@ -34,6 +34,7 @@ namespace KinectDemoApplikation
         /// </summary>
         private KinectHandler colorFrameHandler;
 
+
         /// <summary>
         /// Paper UIElements List
         /// </summary>
@@ -59,6 +60,12 @@ namespace KinectDemoApplikation
         /// </summary>
         private KinectSensor sensor;
 
+        //gestures
+        public Gesture gestureClosed;
+        public Gesture gestureOpen;
+        public Gesture gestureQuicklyClosed;
+        public Gesture gestureQuicklyOpen;
+
         /// <summary>
         /// Default construtor
         /// </summary>
@@ -82,6 +89,18 @@ namespace KinectDemoApplikation
             {
                 sensor.Open();
             }
+
+            //prepare gesture
+            gestureClosed = new Gesture(RightHandClosed);
+            gestureOpen = new Gesture(RightHandOpen);
+            gestureQuicklyClosed = new Gesture(RightHandQuicklyClosed);
+            gestureQuicklyOpen = new Gesture(RightHandQuicklyOpened);
+
+            //add listener
+            gestureClosed.GestureRecognized += Gesture_RightHandClosedGesture;
+            gestureOpen.GestureRecognized += Gesture_RightHandOpenGesture;
+            gestureQuicklyClosed.GestureRecognized += Gesture_RightHandQuicklyClosedGesture;
+            gestureQuicklyOpen.GestureRecognized += Gesture_RightHandQuicklyOpenGesture;
 
             //create Handler objects
             this.colorFrameHandler = new ColorFrameHandler();
@@ -214,7 +233,68 @@ namespace KinectDemoApplikation
 
         }
 
+        /// <summary>
+        /// methods are called when gesture is recognized (fired)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
+        private void Gesture_RightHandClosedGesture(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right Hand Closed");
+        }
+
+        private void Gesture_RightHandOpenGesture(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right Hand Opened");
+        }
+
+        private void Gesture_RightHandQuicklyClosedGesture(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right Hand Quickly Closed");
+        }
+
+        private void Gesture_RightHandQuicklyOpenGesture(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right Hand Quickly Openend");
+        }
+
+
+
+        #region IGesturePartEnums
+
+        /// <summary>
+        /// enums for storing the gesture patterns
+        /// </summary>
+
+        IGesturePart[] RightHandQuicklyClosed = new IGesturePart[]
+        {
+            Gesture.open, Gesture.closed, Gesture.open
+        };
+
+        IGesturePart[] RightHandQuicklyOpened = new IGesturePart[]
+            {
+                Gesture.closed, Gesture.open, Gesture.closed
+            };
+        IGesturePart[] RightHandOpen = new IGesturePart[]
+            {
+                //1x closed
+                Gesture.closed,
+                //15x open
+                Gesture.open, Gesture.open, Gesture.open, Gesture.open, Gesture.open,
+                Gesture.open, Gesture.open, Gesture.open, Gesture.open, Gesture.open,
+                Gesture.open, Gesture.open, Gesture.open, Gesture.open, Gesture.open
+            };
+        IGesturePart[] RightHandClosed = new IGesturePart[]
+            {
+                //1x open
+                Gesture.open,
+                //15x closed
+                Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed,
+                Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed,
+                Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed
+            };
+        #endregion
 
     }
 }

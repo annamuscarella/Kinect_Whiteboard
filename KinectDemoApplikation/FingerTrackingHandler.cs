@@ -29,6 +29,11 @@ namespace KinectDemoApplikation
         private BodyFrameReader reader;
 
         /// <summary>
+        /// Controller instance used for storing the current controller
+        /// </summary>
+        Controller controller;
+
+        /// <summary>
         /// The coordinate mapper is used (in this context) to transform metrical body joint positions (x,y,z) in color pixel (x,y)
         /// </summary>
         private CoordinateMapper coordinateMapper;
@@ -119,6 +124,15 @@ namespace KinectDemoApplikation
                     //load body
                     Body body = bodies[i];
 
+                  //update all gesture handlers
+                    if (body.TrackingId != 0)
+                    {
+                        //fire update
+                        controller.gestureClosed.Update(body);
+                        controller.gestureOpen.Update(body);
+                        controller.gestureQuicklyClosed.Update(body);
+                        controller.gestureQuicklyOpen.Update(body);
+                    }
 
 
                     //Remove old finger joint position, only if the hand is not closed!!! TODO: consider confidence, there are more states besides HandState.Closed
