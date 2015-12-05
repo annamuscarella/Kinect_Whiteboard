@@ -60,11 +60,7 @@ namespace KinectDemoApplikation
         /// </summary>
         private KinectSensor sensor;
 
-        //gestures
-        public Gesture gestureClosed;
-        public Gesture gestureOpen;
-        public Gesture gestureQuicklyClosed;
-        public Gesture gestureQuicklyOpen;
+        IGestureHandler _gestureHandler = new APIController();
 
         /// <summary>
         /// Default construtor
@@ -90,17 +86,11 @@ namespace KinectDemoApplikation
                 sensor.Open();
             }
 
-            //prepare gesture
-            gestureClosed = new Gesture(RightHandClosed);
-            gestureOpen = new Gesture(RightHandOpen);
-            gestureQuicklyClosed = new Gesture(RightHandQuicklyClosed);
-            gestureQuicklyOpen = new Gesture(RightHandQuicklyOpened);
-
-            //add listener
-            gestureClosed.GestureRecognized += Gesture_RightHandClosedGesture;
-            gestureOpen.GestureRecognized += Gesture_RightHandOpenGesture;
-            gestureQuicklyClosed.GestureRecognized += Gesture_RightHandQuicklyClosedGesture;
-            gestureQuicklyOpen.GestureRecognized += Gesture_RightHandQuicklyOpenGesture;
+            //add gesture Handlers
+            _gestureHandler.SetRightHandClosed(Gesture_RightHandClosedGesture);
+            _gestureHandler.SetRightHandOpen(Gesture_RightHandOpenGesture);
+            _gestureHandler.SetRightHandQuicklyClosed(Gesture_RightHandQuicklyClosedGesture);
+            _gestureHandler.setRightHandQuicklyOpen(Gesture_RightHandQuicklyOpenGesture);
 
             //create Handler objects
             this.colorFrameHandler = new ColorFrameHandler();
@@ -261,40 +251,7 @@ namespace KinectDemoApplikation
 
 
 
-        #region IGesturePartEnums
-
-        /// <summary>
-        /// enums for storing the gesture patterns
-        /// </summary>
-
-        IGesturePart[] RightHandQuicklyClosed = new IGesturePart[]
-        {
-            Gesture.open, Gesture.closed, Gesture.open
-        };
-
-        IGesturePart[] RightHandQuicklyOpened = new IGesturePart[]
-            {
-                Gesture.closed, Gesture.open, Gesture.closed
-            };
-        IGesturePart[] RightHandOpen = new IGesturePart[]
-            {
-                //1x closed
-                Gesture.closed,
-                //15x open
-                Gesture.open, Gesture.open, Gesture.open, Gesture.open, Gesture.open,
-                Gesture.open, Gesture.open, Gesture.open, Gesture.open, Gesture.open,
-                Gesture.open, Gesture.open, Gesture.open, Gesture.open, Gesture.open
-            };
-        IGesturePart[] RightHandClosed = new IGesturePart[]
-            {
-                //1x open
-                Gesture.open,
-                //15x closed
-                Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed,
-                Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed,
-                Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed, Gesture.closed
-            };
-        #endregion
+        
 
     }
 }

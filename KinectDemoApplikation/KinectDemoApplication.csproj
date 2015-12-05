@@ -55,9 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="APIController.cs" />
     <Compile Include="FingerTrackingHandler.cs" />
     <Compile Include="Gesture.cs" />
     <Compile Include="GesturePart.cs" />
+    <Compile Include="IGestureHandler.cs" />
     <Compile Include="IGesturePart.cs" />
     <Compile Include="PencilProvider.cs" />
     <Compile Include="SkeletonHandler.cs" />

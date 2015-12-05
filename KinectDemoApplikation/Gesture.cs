@@ -9,8 +9,10 @@ namespace KinectDemoApplikation
 {
     public class Gesture
     {
-        public static GesturePart open;
+        //can be used for creating gesture pattern enums in controller
+        public static GesturePart open; 
         public static GesturePart closed;
+
         //containing the gesture parts
         private IGesturePart[] parts;
 

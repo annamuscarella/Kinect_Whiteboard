@@ -9,8 +9,12 @@ namespace KinectDemoApplikation
 {
     public class GesturePart : IGesturePart
     {
-        HandState success;
+        HandState success; //added private instance which is initialized in constructor
 
+        /// <summary>
+        /// constructor is used to define success handstate
+        /// </summary>
+        /// <param name="successHandState"></param>
         public GesturePart(HandState successHandState) {
             success = successHandState;
         }
@@ -23,7 +27,8 @@ namespace KinectDemoApplikation
             }
             else
             {
-                if (body.HandRightState == success)
+                //changed handstate to success
+                if (body.HandRightState == success) 
                 {
                     return GesturePartResult.Succeded;
 
