@@ -1,6 +1,7 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,8 +45,13 @@ namespace KinectDemoApplikation
         //reference to PencilProvider class
         PencilProvider provider;
 
+        Boolean DrawingEnabled;
+
         //list of detected bodies
         private Body[] bodies;
+
+        private double offset_x, offset_y;
+
 
         //Dictionary (HashMap) which associates the last detected right finger joint (value) with the tracking ID of the body (key)
         private Dictionary<ulong, Joint> lastFingerJoint = new Dictionary<ulong, Joint>();
@@ -68,8 +74,8 @@ namespace KinectDemoApplikation
                 coordinateMapper = sensor.CoordinateMapper;
 
                 drawer = controller.Ui.CanvasDrawer;
-    
 
+                DrawingEnabled = false;
                 /*controller.Ui.Pencil_holder.Children.Add(controller.Ui.Pencil);
                 controller.Ui.Pencil.SetCurrentValue(Grid.ColumnProperty, 0);
                 controller.Ui.Pencil.SetCurrentValue(Grid.RowProperty, 1);*/
@@ -124,14 +130,11 @@ namespace KinectDemoApplikation
                     //load body
                     Body body = bodies[i];
 
-                  //update all gesture handlers
+                    //update all gesture handlers
                     if (body.TrackingId != 0)
                     {
                         //fire update
-                        controller.gestureClosed.Update(body);
-                        controller.gestureOpen.Update(body);
-                        controller.gestureQuicklyClosed.Update(body);
-                        controller.gestureQuicklyOpen.Update(body);
+                        controller.Update(body);
                     }
 
 
@@ -194,10 +197,19 @@ namespace KinectDemoApplikation
                         //calculate point and add it
                         mappedSpacePoint = this.coordinateMapper.MapCameraPointToColorSpace(newPosition);
                         Point newPoint = new Point((canvasWidth / cameraWidth) * mappedSpacePoint.X, (canvasHeight / cameraHeight) * mappedSpacePoint.Y);
-                        
-                        
+                        try { provider.MoveTo(provider.cursor, (canvasWidth / cameraWidth) * mappedSpacePoint.X + offset_x, (canvasHeight / cameraHeight) * mappedSpacePoint.Y - offset_y, Canvas.LeftProperty, Canvas.TopProperty); }
+                        catch (Exception d) { Debug.WriteLine("Exception thrown because not handled"); }
+
+
+                        if (DrawingEnabled) {
+                            if (newPoint.X > controller.Ui.canvas.ActualWidth / 100 && newPoint.X < controller.Ui.canvas.ActualWidth - controller.Ui.canvas.ActualWidth / 100
+                                && newPoint.Y > controller.Ui.canvas.ActualHeight / 100 && newPoint.Y < controller.Ui.canvas.ActualHeight - controller.Ui.canvas.ActualHeight / 100)
+                            {
+                                drawer.DrawLine(oldPoint, newPoint, provider.brush);
+                            }
+                        }
                         //adapt new finger point
-                        if (body.HandRightState != HandState.Closed) {
+                        /*if (body.HandRightState != HandState.Closed) {
 
                             provider.changeCursorToHand();
                             try { MoveTo(provider.cursor, (canvasWidth / cameraWidth) * mappedSpacePoint.X, (canvasHeight / cameraHeight) * mappedSpacePoint.Y, Canvas.LeftProperty, Canvas.TopProperty); }
@@ -222,7 +234,7 @@ namespace KinectDemoApplikation
                             {
                                 drawer.DrawLine(oldPoint, newPoint, provider.brush);
                             }
-                    }
+                    }*/
                         //debug stuff
                         controller.Ui.DisplayDebug(String.Format("[Camera: X: {0} | Y: {1} | Z: {2} ][Color: X: {3} | Y: {4} ] ", oldPosition.X, oldPosition.Y, oldPosition.Z, mappedSpacePoint.X, mappedSpacePoint.Y));
 
@@ -236,25 +248,40 @@ namespace KinectDemoApplikation
             }
         }
 
-      
-        public static void MoveTo(System.Windows.Controls.Image target, double newX, double newY, DependencyProperty canvas_horizontal, DependencyProperty canvas_vertical)
+        public void Gesture_RightHandClosedGesture(object sender, EventArgs e)
         {
-            Point oldP = new Point(newX, newY);
-            if (canvas_horizontal == Canvas.LeftProperty) {
-                oldP.X =  Canvas.GetLeft(target); }
-            if (canvas_horizontal == Canvas.RightProperty) {
-                oldP.X = Canvas.GetRight(target); }
-            if (canvas_vertical == Canvas.TopProperty) { oldP.Y = Canvas.GetTop(target); }
-            if (canvas_vertical == Canvas.BottomProperty) { oldP.Y = Canvas.GetBottom(target); }
-
-
-
-            DoubleAnimation anim1 = new DoubleAnimation(oldP.X, newX, TimeSpan.FromSeconds(0.05));
-            DoubleAnimation anim2 = new DoubleAnimation(oldP.Y, newY, TimeSpan.FromSeconds(0.05));
-
-            target.BeginAnimation(canvas_horizontal, anim1);
-            target.BeginAnimation(canvas_vertical, anim2);
+            Console.WriteLine("Right Hand Closed");
+            provider.changeCursorToMarker();
+            //offset_x = 0.5* provider.cursor.ActualWidth;
+            offset_x = 0;
+            //offset_y = -0.5 * provider.cursor.ActualHeight;
+            offset_y = 0;
+            DrawingEnabled = true;
         }
+
+        public void Gesture_RightHandOpenGesture(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right Hand Opened");
+            provider.changeCursorToHand();
+            DrawingEnabled = false;
+            offset_x =0;
+            offset_y =0;
+        }
+
+        public void Gesture_RightHandQuicklyClosedGesture(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right Hand Quickly Closed");
+
+        }
+
+        public void Gesture_RightHandQuicklyOpenGesture(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right Hand Quickly Openend");
+
+        }
+
+
+        
 
 
     }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace KinectDemoApplikation
 {
@@ -76,6 +78,8 @@ namespace KinectDemoApplikation
             controller.Ui.Panel.Children.Add(eraser);
             Canvas.SetLeft(eraser, controller.Ui.Panel.ActualWidth);
             Canvas.SetTop(eraser, 1);
+
+            cursor = hand;
         }
 
         //function for changing the displayed cursor icon to hand image
@@ -119,6 +123,29 @@ namespace KinectDemoApplikation
             hand.Visibility = System.Windows.Visibility.Hidden;
             eraser.Visibility = System.Windows.Visibility.Visible;
             grid_eraser.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        public void MoveTo(System.Windows.Controls.Image target, double newX, double newY, DependencyProperty canvas_horizontal, DependencyProperty canvas_vertical)
+        {
+            Point oldP = new Point(newX, newY);
+            if (canvas_horizontal == Canvas.LeftProperty)
+            {
+                oldP.X = Canvas.GetLeft(target);
+            }
+            if (canvas_horizontal == Canvas.RightProperty)
+            {
+                oldP.X = Canvas.GetRight(target);
+            }
+            if (canvas_vertical == Canvas.TopProperty) { oldP.Y = Canvas.GetTop(target); }
+            if (canvas_vertical == Canvas.BottomProperty) { oldP.Y = Canvas.GetBottom(target); }
+
+
+
+            DoubleAnimation anim1 = new DoubleAnimation(oldP.X, newX, TimeSpan.FromSeconds(0.05));
+            DoubleAnimation anim2 = new DoubleAnimation(oldP.Y, newY, TimeSpan.FromSeconds(0.05));
+
+            target.BeginAnimation(canvas_horizontal, anim1);
+            target.BeginAnimation(canvas_vertical, anim2);
         }
     }
 }

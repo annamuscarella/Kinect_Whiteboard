@@ -60,7 +60,7 @@ namespace KinectDemoApplikation
         /// </summary>
         private KinectSensor sensor;
 
-        IGestureHandler _gestureHandler = new APIController();
+        IGestureHandler _gestureHandler;
 
         /// <summary>
         /// Default construtor
@@ -86,12 +86,10 @@ namespace KinectDemoApplikation
                 sensor.Open();
             }
 
-            //add gesture Handlers
-            _gestureHandler.SetRightHandClosed(Gesture_RightHandClosedGesture);
-            _gestureHandler.SetRightHandOpen(Gesture_RightHandOpenGesture);
-            _gestureHandler.SetRightHandQuicklyClosed(Gesture_RightHandQuicklyClosedGesture);
-            _gestureHandler.setRightHandQuicklyOpen(Gesture_RightHandQuicklyOpenGesture);
 
+            _gestureHandler = new APIController();
+
+            
             //create Handler objects
             this.colorFrameHandler = new ColorFrameHandler();
             this.infraredFrameHandler = new InfraredFrameHandler();
@@ -110,6 +108,12 @@ namespace KinectDemoApplikation
             this.fingerTrackingHandler.Enabled = false;
             DisplayStatus();
 
+            //add gesture Handlers
+            _gestureHandler.SetRightHandClosed(fingerTrackingHandler.Gesture_RightHandClosedGesture);
+            _gestureHandler.SetRightHandOpen(fingerTrackingHandler.Gesture_RightHandOpenGesture);
+            _gestureHandler.SetRightHandQuicklyClosed(fingerTrackingHandler.Gesture_RightHandQuicklyClosedGesture);
+            _gestureHandler.setRightHandQuicklyOpen(fingerTrackingHandler.Gesture_RightHandQuicklyOpenGesture);
+
             //Add all elements for drwaing paper to a list
             PaperElements = new List<UIElement>();
             PaperElements.Add(this.Ui.Papier);
@@ -121,6 +125,10 @@ namespace KinectDemoApplikation
 
             this.Ui.color_background.Visibility = System.Windows.Visibility.Hidden;
 
+        }
+
+        public void Update(Body body) {
+            _gestureHandler.Update(body);
         }
 
         /// <summary>
@@ -229,25 +237,7 @@ namespace KinectDemoApplikation
         /// <param name="sender"></param>
         /// <param name="e"></param>
 
-        private void Gesture_RightHandClosedGesture(object sender, EventArgs e)
-        {
-            Console.WriteLine("Right Hand Closed");
-        }
-
-        private void Gesture_RightHandOpenGesture(object sender, EventArgs e)
-        {
-            Console.WriteLine("Right Hand Opened");
-        }
-
-        private void Gesture_RightHandQuicklyClosedGesture(object sender, EventArgs e)
-        {
-            Console.WriteLine("Right Hand Quickly Closed");
-        }
-
-        private void Gesture_RightHandQuicklyOpenGesture(object sender, EventArgs e)
-        {
-            Console.WriteLine("Right Hand Quickly Openend");
-        }
+        
 
 
 
