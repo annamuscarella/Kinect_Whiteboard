@@ -61,8 +61,8 @@
     <Compile Include="GesturePart.cs" />
     <Compile Include="IGestureHandler.cs" />
     <Compile Include="IGesturePart.cs" />
+    <Compile Include="Pencil.cs" />
     <Compile Include="PencilProvider.cs" />
-    <Compile Include="SkeletonHandler.cs" />
     <Compile Include="Whiteboard.xaml.cs">
       <DependentUpon>Whiteboard.xaml</DependentUpon>
     </Compile>
@@ -77,7 +77,6 @@
     <Compile Include="CanvasDrawer.cs" />
     <Compile Include="ColorFrameHandler.cs" />
     <Compile Include="Controller.cs" />
-    <Compile Include="InfraredFrameHandler.cs" />
     <Compile Include="KinectHandler.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -150,6 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\bleistift.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\marker_open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\marker_cover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

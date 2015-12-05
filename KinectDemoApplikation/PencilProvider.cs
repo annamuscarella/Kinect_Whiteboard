@@ -11,20 +11,21 @@ using System.Windows.Media.Animation;
 namespace KinectDemoApplikation
 {
     
-    class PencilProvider
+   public class PencilProvider
     {
-        Image pencil;
+        /*Image pencil;
         Image marker;
         Image hand;
         Image eraser;
         Image grid_pencil;
         Image grid_eraser;
-        Image grid_marker;
+        Image grid_marker;*/
 
         public Brush brush;
-
-        public Image cursor;
-
+        private Boolean DrawingEnabled;
+        public Pencil cursor;
+        private Pencil pencil, marker, hand, eraser;
+        private Pencil[] pencils;
         Controller controller;
 
         //every pencil must be displayed in the grid (when window is initialized and user didn't use the pencil so far
@@ -34,50 +35,28 @@ namespace KinectDemoApplikation
             this.controller = con;
             brush = new SolidColorBrush(Colors.Black);
             //initialize Images
-            grid_pencil = new Image();
-            grid_eraser = new Image();
-            grid_marker = new Image();
 
-            pencil = new Image();
-            this.marker = new Image(); 
-            eraser = new Image();
+            pencil = new Pencil(controller.Ui.Pencil, Colors.Gray, 2);
+            pencil.SetOffset(0.5, -0.5);
+            marker = new Pencil(controller.Ui.Marker, controller.Ui.Marker_Open, Color.FromArgb(100, 0, 0, 255), 10);
+            marker.SetOffset(0.5, 0);
+            eraser = new Pencil(controller.Ui.Eraser, Colors.White, 20);
+            eraser.SetOffset(0.5, -0.5);
+            hand = new Pencil(controller.Ui.handcursor, Colors.White);
+            hand.DrawingEnabled = false;
 
-            //get images from grid on the right side of paper
-            grid_pencil = controller.Ui.Pencil;
-            grid_eraser = controller.Ui.Eraser;
-            grid_marker = controller.Ui.Marker;
-            hand = controller.Ui.cursor;
+            pencils = new Pencil[] {pencil, marker, eraser};
+            int i = 0;
+            foreach (Pencil p in pencils) {
+                controller.Ui.Panel.Children.Add(p.CanvasImage);
+                Canvas.SetLeft(p.CanvasImage, controller.Ui.Panel.ActualWidth / 9 * 8);
+                Canvas.SetTop(p.CanvasImage, controller.Ui.Panel.ActualHeight / 3 * i);
+                i++;
+            }
 
-            //copy images from grid to canvas (for each copy source and size)
-            pencil.Source = grid_pencil.Source;
-            pencil.Height = grid_pencil.ActualHeight;
-            pencil.Width = grid_pencil.ActualWidth;
-
-            marker.Source = grid_marker.Source;
-            marker.Height = grid_marker.ActualHeight;
-            marker.Width = grid_marker.ActualWidth;
-
-            eraser.Source = grid_eraser.Source;
-            eraser.Height = grid_eraser.ActualHeight;
-            eraser.Width = grid_eraser.ActualWidth;
-
-            //hide all canvas images, as they should not be visible until user grabs the pen for the first time
-            pencil.Visibility = System.Windows.Visibility.Hidden;
-            marker.Visibility = System.Windows.Visibility.Hidden;
-            eraser.Visibility = System.Windows.Visibility.Hidden;
-
-            //Add all pencils to canvas Panel (large canvas) and set properties (all must be left for the MoveTo function to work)
-            controller.Ui.Panel.Children.Add(pencil);
-            Canvas.SetLeft(pencil, controller.Ui.Panel.ActualWidth);
-            Canvas.SetTop(pencil, 1);
-
-            controller.Ui.Panel.Children.Add(marker);
-            Canvas.SetLeft(marker, controller.Ui.Panel.ActualWidth);
-            Canvas.SetTop(marker, 1);
-
-            controller.Ui.Panel.Children.Add(eraser);
-            Canvas.SetLeft(eraser, controller.Ui.Panel.ActualWidth);
-            Canvas.SetTop(eraser, 1);
+            controller.Ui.Panel.Children.Add(hand.CanvasImage);
+            Canvas.SetLeft(hand.CanvasImage, controller.Ui.Panel.ActualWidth / 9 * 2);
+            Canvas.SetTop(hand.CanvasImage, 50);
 
             cursor = hand;
         }
@@ -85,7 +64,7 @@ namespace KinectDemoApplikation
         //function for changing the displayed cursor icon to hand image
         public void changeCursorToHand() {
             cursor = hand;
-            hand.Visibility = System.Windows.Visibility.Visible;
+            hand.GrabPencil();
         }
 
         //function for changing the displayed cursor icon to pencil
@@ -94,10 +73,8 @@ namespace KinectDemoApplikation
         public void changeCursorToPencil()
         {
             cursor = pencil;
-            brush = new SolidColorBrush(Colors.Gray);
-            hand.Visibility = System.Windows.Visibility.Hidden;
-            pencil.Visibility = System.Windows.Visibility.Visible;
-            grid_pencil.Visibility = System.Windows.Visibility.Hidden;
+            pencil.GrabPencil();
+            hand.HideAllImages();
         }
 
         //function for changing the displayed cursor icon to marker
@@ -106,10 +83,8 @@ namespace KinectDemoApplikation
         public void changeCursorToMarker()
         {
             cursor = marker;
-            brush = new SolidColorBrush(Colors.Blue);
-            hand.Visibility = System.Windows.Visibility.Hidden;
-            marker.Visibility = System.Windows.Visibility.Visible;
-            grid_marker.Visibility = System.Windows.Visibility.Hidden;
+            marker.GrabPencil(controller.Ui.Marker_Cover);
+            hand.HideAllImages();
         }
 
         //function for changing the displayed cursor icon to eraser
@@ -119,33 +94,92 @@ namespace KinectDemoApplikation
         public void changeCursorToEraser()
         {
             cursor = eraser;
-            brush = new SolidColorBrush(Colors.White);
-            hand.Visibility = System.Windows.Visibility.Hidden;
-            eraser.Visibility = System.Windows.Visibility.Visible;
-            grid_eraser.Visibility = System.Windows.Visibility.Hidden;
+            eraser.GrabPencil();
+            hand.HideAllImages();
         }
 
-        public void MoveTo(System.Windows.Controls.Image target, double newX, double newY, DependencyProperty canvas_horizontal, DependencyProperty canvas_vertical)
+        public void ChangeDrawingStateTo(Boolean DrawingEnabled)
         {
-            Point oldP = new Point(newX, newY);
+            if (cursor.DrawingEnabled)
+            {
+                this.DrawingEnabled = DrawingEnabled;
+            }
+            else {
+                this.DrawingEnabled = false;
+            }
+
+        }
+
+        public Boolean GetDrawingState() {
+            return DrawingEnabled;
+        }
+
+        public void MoveCursorTo(Point newPoint, DependencyProperty canvas_horizontal, DependencyProperty canvas_vertical)
+        {
+            Point oldP = newPoint;
             if (canvas_horizontal == Canvas.LeftProperty)
             {
-                oldP.X = Canvas.GetLeft(target);
+                oldP.X = Canvas.GetLeft(cursor.CanvasImage);
             }
             if (canvas_horizontal == Canvas.RightProperty)
             {
-                oldP.X = Canvas.GetRight(target);
+                oldP.X = Canvas.GetRight(cursor.CanvasImage);
             }
-            if (canvas_vertical == Canvas.TopProperty) { oldP.Y = Canvas.GetTop(target); }
-            if (canvas_vertical == Canvas.BottomProperty) { oldP.Y = Canvas.GetBottom(target); }
+            if (canvas_vertical == Canvas.TopProperty) { oldP.Y = Canvas.GetTop(cursor.CanvasImage); }
+            if (canvas_vertical == Canvas.BottomProperty) { oldP.Y = Canvas.GetBottom(cursor.CanvasImage); }
 
 
 
-            DoubleAnimation anim1 = new DoubleAnimation(oldP.X, newX, TimeSpan.FromSeconds(0.05));
-            DoubleAnimation anim2 = new DoubleAnimation(oldP.Y, newY, TimeSpan.FromSeconds(0.05));
+            DoubleAnimation anim1 = new DoubleAnimation(oldP.X, newPoint.X + cursor.GetOffsetX(), TimeSpan.FromSeconds(0.05));
+            DoubleAnimation anim2 = new DoubleAnimation(oldP.Y, newPoint.Y + cursor.GetOffsetY(), TimeSpan.FromSeconds(0.05));
 
-            target.BeginAnimation(canvas_horizontal, anim1);
-            target.BeginAnimation(canvas_vertical, anim2);
+            cursor.CanvasImage.BeginAnimation(canvas_horizontal, anim1);
+            cursor.CanvasImage.BeginAnimation(canvas_vertical, anim2);
+        }
+
+        /// <summary>
+        /// Method for changing the Pencil to the nearest Pencil next to Cursor
+        /// </summary>
+        /// <param name="Max_Distance">Maximum Range where pencil is grabbed</param>
+
+        public void ChangeCursorToNearestPencil(double Max_Distance) {
+
+            Pencil nearest = null;
+            double nearest_distance = Max_Distance;
+
+            foreach (Pencil p in pencils)
+            {
+                if (cursor != p)
+                {
+                    //get difference between two pictures
+                    double distance_x = Canvas.GetLeft(p.CanvasImage) - Canvas.GetLeft(cursor.CanvasImage);
+                    distance_x = Math.Sqrt(distance_x * distance_x);
+
+                    double distance_y = Canvas.GetTop(p.CanvasImage) - Canvas.GetTop(cursor.CanvasImage);
+                    distance_y = Math.Sqrt(distance_y * distance_y);
+                    double distance = Math.Sqrt(distance_x * distance_x + distance_y * distance_y);
+
+                    if (nearest_distance >= distance)
+                    {
+                        nearest_distance = distance;
+                        nearest = p;
+                    }
+                }
+            }
+
+            if (nearest == marker) {
+                changeCursorToMarker();
+            }
+            if (nearest == pencil) {
+                changeCursorToPencil();
+            }
+            if (nearest == eraser)
+            {
+                changeCursorToEraser();
+            }
+            if (nearest == null) { changeCursorToHand(); }
+            
+
         }
     }
 }

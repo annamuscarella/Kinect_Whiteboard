@@ -41,16 +41,6 @@ namespace KinectDemoApplikation
         public List<UIElement> PaperElements;
 
         /// <summary>
-        /// Infrared Frame Handler
-        /// </summary>
-        private KinectHandler infraredFrameHandler;
-
-        /// <summary>
-        /// Skeleton Frame Handler
-        /// </summary>
-        private SkeletonHandler skeletonHandler;
-
-        /// <summary>
         /// Finger Tracking Handler
         /// </summary>
         private FingerTrackingHandler fingerTrackingHandler;
@@ -92,19 +82,14 @@ namespace KinectDemoApplikation
             
             //create Handler objects
             this.colorFrameHandler = new ColorFrameHandler();
-            this.infraredFrameHandler = new InfraredFrameHandler();
-            this.skeletonHandler = new SkeletonHandler();
             this.fingerTrackingHandler = new FingerTrackingHandler();
 
             //start handler
             this.colorFrameHandler.Start(this, sensor);
-            this.infraredFrameHandler.Start(this, sensor);
-            this.skeletonHandler.Start(this, sensor);
             this.fingerTrackingHandler.Start(this, sensor);
 
             //enables only the color handler
             this.colorFrameHandler.Enabled = true;
-            this.skeletonHandler.Enabled = false;
             this.fingerTrackingHandler.Enabled = false;
             DisplayStatus();
 
@@ -142,9 +127,6 @@ namespace KinectDemoApplikation
             }
 
             this.colorFrameHandler.Stop();
-
-            this.infraredFrameHandler.Stop();
-            this.skeletonHandler.Stop();
             this.fingerTrackingHandler.Stop();
         }
 
@@ -154,38 +136,15 @@ namespace KinectDemoApplikation
         public void EnableColor()
         {
             colorFrameHandler.Enabled = true;
-            this.infraredFrameHandler.Enabled = false;  
             DisplayStatus();
         }
 
         public void DisableColor()
         {
             colorFrameHandler.Enabled = false;
-            this.infraredFrameHandler.Enabled = false;
             DisplayStatus();
         }
 
-
-
-
-        /// <summary>
-        /// Enables the infrared handler and disable all other handlers
-        /// </summary>
-        public void EnableInfrared()
-        {
-            this.colorFrameHandler.Enabled = false;
-            this.infraredFrameHandler.Enabled = true;
-            DisplayStatus();
-        }
-
-        /// <summary>
-        /// Changes into skeleton mode
-        /// </summary>
-        public void ChangeSkeletonMode()
-        {
-            this.skeletonHandler.Enabled = !this.skeletonHandler.Enabled;
-            DisplayStatus();
-        }
 
         /// <summary>
         /// Changes into finger tracking mode
@@ -206,18 +165,6 @@ namespace KinectDemoApplikation
             {
                 msg += "Color Mode ";
             }
-            if (this.infraredFrameHandler.Enabled)
-            {
-                msg += "Infrared Mode ";
-            }
-            if (this.skeletonHandler.Enabled)
-            {
-                msg += "| Skeleton Tracking ON ";
-            }
-            else
-            {
-                msg += "| Skeleton Tracking OFF ";
-            }
             if (this.fingerTrackingHandler.Enabled)
             {
                 msg += "| Finger Tracking ON ";
@@ -231,17 +178,6 @@ namespace KinectDemoApplikation
 
         }
 
-        /// <summary>
-        /// methods are called when gesture is recognized (fired)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-
-        
-
-
-
-        
 
     }
 }

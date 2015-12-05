@@ -10,7 +10,7 @@
     <UserControl.Background>
         <ImageBrush ImageSource="Images\holz.jpg" TileMode="FlipXY"/>
     </UserControl.Background>
-    <Grid Name="OuterWindow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid Name="OuterWindow" VerticalAlignment="Stretch">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
@@ -18,9 +18,10 @@
         </Grid.RowDefinitions>
         <Image Source="Images/header.png" HorizontalAlignment="Left" VerticalAlignment="Stretch" Stretch="Uniform" Grid.Row="0"/>
 
+        <Image  Grid.Column="1" Grid.Row="2" Name="Marker_Open" Height="{Binding ActualHeight, ElementName=Pencil}" Panel.ZIndex="1"  Source="Images\marker_open.png" Visibility="Hidden"></Image>
 
         <Canvas Name="Panel" Grid.Row="1">
-            
+
             <Grid Name="main_grid" ShowGridLines="False" Height="{Binding ActualHeight, ElementName=Panel}" Width="{Binding ActualWidth, ElementName=Panel}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0*"/>
@@ -35,6 +36,8 @@
                     <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
+                <Image  Grid.Column="1" Grid.Row="2" Name="handcursor" Height="{Binding ActualHeight, ElementName=Pencil}" Panel.ZIndex="1"  Source="Images\hand_cursor.png"></Image>
+
                 <Button Name="SwitchButton" Click="SwitchButton_Click">Switch</Button>
 
                 <Image Name="Spirale" Source="Images\spirale.png" Stretch="Fill"  Grid.Column="1" Grid.Row="1" Width="{Binding ActualWidth, ElementName=canvas}" VerticalAlignment="Bottom" />
@@ -50,7 +53,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="0*"/>
                     </Grid.RowDefinitions>
-                    
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width ="2*"/>
                         <ColumnDefinition Width ="0.5*"/>
@@ -58,6 +61,7 @@
                     <Image Name="Pencil" Grid.Column="0" Grid.Row="1" Source="Images\bleistift.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
                     <Image Name="Eraser" Grid.Column="0" Grid.Row="3"  Source="Images\eraser.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
                     <Image Name="Marker" Grid.Column="0" Grid.Row="2"  Source="Images\marker_closed.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
+                    <Image Name="Marker_Cover" Grid.Column="0" Grid.Row="2"  Source="Images\marker_cover.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True"></Image>
                 </Grid>
                 <Grid DockPanel.Dock="Left" Grid.Column="0" Grid.Row="2">
                     <Grid.RowDefinitions>
@@ -70,8 +74,8 @@
                 <Border Name="Papier" Grid.Column="1" Grid.Row="2" Background="White" Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"></Border>
                 <Image Name="color_background" Grid.Column="1" Grid.Row="1" Height="{Binding ActualHeight, ElementName=Panel}" Width="{Binding ActualWidth, ElementName=Panel}" ></Image>
                 <Canvas Grid.Column="1" Grid.Row="2" Name="canvas">
-                   
-                    <Image  Grid.Column="1" Grid.Row="2" Canvas.Left="10.0" Canvas.Top="16.0" Name="cursor" Height="{Binding ActualHeight, ElementName=Pencil}" Panel.ZIndex="1" AllowDrop="True"  Source="Images\hand_cursor.png"></Image>
+
+
                     <Image Name="Pencil_cursor" Canvas.Left="10.0" Canvas.Top="16.0" Height="{Binding ActualHeight, ElementName=cursor}" Source="Images\pencil.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsManipulationEnabled="True" Visibility="Hidden"></Image>
                 </Canvas>
 

@@ -35,6 +35,9 @@ namespace KinectDemoApplikation
         /// </summary>
         private Whiteboard ui;
 
+        public Controller controller;
+        public PencilProvider provider;
+
         /// <summary>
         /// poperty container containing preselected colors which can be used for the skeleton and finger tracking drawing
         /// </summary>
@@ -100,24 +103,31 @@ namespace KinectDemoApplikation
         /// <param name="a">Position of point A</param>
         /// <param name="b">Position of point B</param>
         /// <param name="color">Color of the line</param>
-        public void DrawLine(Point a, Point b, Brush color)
+        public void DrawLine(Point a, Point b, Pencil pencil)
         {
-
-            if (b == null || b == null || double.IsInfinity(a.X) || double.IsInfinity(b.X) || double.IsInfinity(a.Y) || double.IsInfinity(b.Y)) { return; }
-
-            //create line
-            Line line = new Line
+            
+            if (provider.GetDrawingState())
             {
-                X1 = a.X,
-                Y1 = a.Y,
-                X2 = b.X,
-                Y2 = b.Y,
-                StrokeThickness = 8,
-                Stroke = color
-            };
+                if (b.X > controller.Ui.canvas.ActualWidth / 100 && a.X < controller.Ui.canvas.ActualWidth - controller.Ui.canvas.ActualWidth / 100
+                              && a.Y > controller.Ui.canvas.ActualHeight / 100 && b.Y < controller.Ui.canvas.ActualHeight - controller.Ui.canvas.ActualHeight / 100)
+                {
+                    if (b == null || b == null || double.IsInfinity(a.X) || double.IsInfinity(b.X) || double.IsInfinity(a.Y) || double.IsInfinity(b.Y)) { return; }
 
-            //add line to canvas
-            ui.canvas.Children.Add(line);
+                //create line
+                Line line = new Line
+                {
+                    X1 = a.X,
+                    Y1 = a.Y,
+                    X2 = b.X,
+                    Y2 = b.Y,
+                    StrokeThickness = pencil.thickness,
+                    Stroke = pencil.getBrush()
+                };
+
+                //add line to canvas
+                ui.canvas.Children.Add(line);
+            }
+            }
         }
 
         /// <summary>

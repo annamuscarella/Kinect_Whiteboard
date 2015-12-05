@@ -45,7 +45,6 @@ namespace KinectDemoApplikation
         //reference to PencilProvider class
         PencilProvider provider;
 
-        Boolean DrawingEnabled;
 
         //list of detected bodies
         private Body[] bodies;
@@ -65,6 +64,7 @@ namespace KinectDemoApplikation
         {
             controller = c;
             provider = new PencilProvider(controller);
+            provider.changeCursorToHand();
             if (sensor != null)
             {
                 //load reader and register frame arrived delegate (listener)
@@ -74,11 +74,9 @@ namespace KinectDemoApplikation
                 coordinateMapper = sensor.CoordinateMapper;
 
                 drawer = controller.Ui.CanvasDrawer;
+                drawer.controller = this.controller;
+                drawer.provider = this.provider;
 
-                DrawingEnabled = false;
-                /*controller.Ui.Pencil_holder.Children.Add(controller.Ui.Pencil);
-                controller.Ui.Pencil.SetCurrentValue(Grid.ColumnProperty, 0);
-                controller.Ui.Pencil.SetCurrentValue(Grid.RowProperty, 1);*/
 
             }
 
@@ -197,44 +195,14 @@ namespace KinectDemoApplikation
                         //calculate point and add it
                         mappedSpacePoint = this.coordinateMapper.MapCameraPointToColorSpace(newPosition);
                         Point newPoint = new Point((canvasWidth / cameraWidth) * mappedSpacePoint.X, (canvasHeight / cameraHeight) * mappedSpacePoint.Y);
-                        try { provider.MoveTo(provider.cursor, (canvasWidth / cameraWidth) * mappedSpacePoint.X + offset_x, (canvasHeight / cameraHeight) * mappedSpacePoint.Y - offset_y, Canvas.LeftProperty, Canvas.TopProperty); }
-                        catch (Exception d) { Debug.WriteLine("Exception thrown because not handled"); }
+                        try {
+                            provider.MoveCursorTo(newPoint, Canvas.LeftProperty, Canvas.TopProperty); }
+                        catch (Exception d) {
+                            Debug.WriteLine("Exception thrown because not handled"); }
 
-
-                        if (DrawingEnabled) {
-                            if (newPoint.X > controller.Ui.canvas.ActualWidth / 100 && newPoint.X < controller.Ui.canvas.ActualWidth - controller.Ui.canvas.ActualWidth / 100
-                                && newPoint.Y > controller.Ui.canvas.ActualHeight / 100 && newPoint.Y < controller.Ui.canvas.ActualHeight - controller.Ui.canvas.ActualHeight / 100)
-                            {
-                                drawer.DrawLine(oldPoint, newPoint, provider.brush);
-                            }
-                        }
-                        //adapt new finger point
-                        /*if (body.HandRightState != HandState.Closed) {
-
-                            provider.changeCursorToHand();
-                            try { MoveTo(provider.cursor, (canvasWidth / cameraWidth) * mappedSpacePoint.X, (canvasHeight / cameraHeight) * mappedSpacePoint.Y, Canvas.LeftProperty, Canvas.TopProperty); }
-                            catch (Exception d) { }
-                        }
-                    if (body.HandRightState == HandState.Closed)
-                    {
-                            provider.changeCursorToMarker();
-                            
-
-                            //img.SetCurrentValue(Canvas., 1);
-                            //img.SetCurrentValue(Canvas.TopProperty, 1);
-
-
-                            double offset_x = 1.7 * provider.cursor.ActualWidth ;
-                            double offset_y = 0.25 * provider.cursor.ActualHeight ;
-
-                            try { MoveTo(provider.cursor, (canvasWidth / cameraWidth) * mappedSpacePoint.X + offset_x, (canvasHeight / cameraHeight) * mappedSpacePoint.Y - offset_y, Canvas.LeftProperty, Canvas.TopProperty); }
-                            catch (Exception d) { }
-                            if (newPoint.X > controller.Ui.canvas.ActualWidth / 100 && newPoint.X < controller.Ui.canvas.ActualWidth - controller.Ui.canvas.ActualWidth/100
-                                && newPoint.Y > controller.Ui.canvas.ActualHeight / 100 && newPoint.Y < controller.Ui.canvas.ActualHeight - controller.Ui.canvas.ActualHeight / 100)
-                            {
-                                drawer.DrawLine(oldPoint, newPoint, provider.brush);
-                            }
-                    }*/
+                        drawer.DrawLine(oldPoint, newPoint, provider.cursor);
+                          
+                        
                         //debug stuff
                         controller.Ui.DisplayDebug(String.Format("[Camera: X: {0} | Y: {1} | Z: {2} ][Color: X: {3} | Y: {4} ] ", oldPosition.X, oldPosition.Y, oldPosition.Z, mappedSpacePoint.X, mappedSpacePoint.Y));
 
@@ -251,19 +219,14 @@ namespace KinectDemoApplikation
         public void Gesture_RightHandClosedGesture(object sender, EventArgs e)
         {
             Console.WriteLine("Right Hand Closed");
-            provider.changeCursorToMarker();
-            //offset_x = 0.5* provider.cursor.ActualWidth;
-            offset_x = 0;
-            //offset_y = -0.5 * provider.cursor.ActualHeight;
-            offset_y = 0;
-            DrawingEnabled = true;
+            provider.ChangeDrawingStateTo(true);
+            
         }
 
         public void Gesture_RightHandOpenGesture(object sender, EventArgs e)
         {
             Console.WriteLine("Right Hand Opened");
-            provider.changeCursorToHand();
-            DrawingEnabled = false;
+            provider.ChangeDrawingStateTo(false);
             offset_x =0;
             offset_y =0;
         }
@@ -271,6 +234,11 @@ namespace KinectDemoApplikation
         public void Gesture_RightHandQuicklyClosedGesture(object sender, EventArgs e)
         {
             Console.WriteLine("Right Hand Quickly Closed");
+            provider.ChangeCursorToNearestPencil(500);
+            offset_x = -0.5 * provider.cursor.CanvasImage.ActualWidth;
+            //offset_x = 0;
+            //offset_y = -0.5 * provider.cursor.ActualHeight;
+            offset_y = 0;
 
         }
 
