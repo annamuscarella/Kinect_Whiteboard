@@ -17,6 +17,7 @@ namespace KinectDemoApplikation
         /// <param name="successHandState"></param>
         public GesturePart(HandState successHandState) {
             success = successHandState;
+
         }
 
         public GesturePartResult CheckGesturePart(Body body)
